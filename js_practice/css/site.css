@@ -1,0 +1,37 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: #14004A
+}
+
+#container {
+	overflow: auto;
+	margin: auto;
+	padding: 0.1em;
+	width: 80%;
+	border: 1px solid #10003B;
+}
+
+#header {
+	width: 100%;
+	background: #100039 none repeat scroll 0% 0%;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#content {
+	width: 80%;
+	float: left;
+}
+
+#sidebar-left {
+	width: 20%;
+	float: left;
+	display: block;
+}
+
+#menu {
+	margin: 10px 10px 10px 0px;
+}
