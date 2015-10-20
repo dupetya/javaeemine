@@ -6,6 +6,10 @@ body {
 	background: #14004A
 }
 
+div {
+	color: white;
+}
+
 #container {
 	overflow: auto;
 	margin: auto;
@@ -22,6 +26,7 @@ body {
 }
 
 #content {
+	font-size: 1.5em;
 	width: 80%;
 	float: left;
 }
