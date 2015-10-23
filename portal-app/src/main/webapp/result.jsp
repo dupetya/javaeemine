@@ -13,7 +13,7 @@
 			<%@ include file="topnav.jsp" %>
 		</div>
 		<div id = "content">
-			<h1>Welcome!</h1>
+			<c:out value="${request }"></c:out>
 		</div>
 		<div id = "footer">
 			<%@include file="footer.jsp" %>
