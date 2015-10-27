@@ -20,6 +20,7 @@
 						<tr>
 							<th>Name</th>
 							<th>E-mail</th>
+							<th>Date of Birth</th>
 						</tr>
 					</thead>
 				</table>

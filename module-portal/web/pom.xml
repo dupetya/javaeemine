@@ -6,19 +6,26 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>portal-app Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<parent>
 		<groupId>hu.dupetya</groupId>
 		<artifactId>module-portal</artifactId>
 		<version>1.0</version>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>hu.dupetya</groupId>
 			<artifactId>core</artifactId>
 			<version>1.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -61,7 +68,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>

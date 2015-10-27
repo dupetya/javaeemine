@@ -2,16 +2,18 @@ package hu.dupetya.common.account.dao;
 
 public class DataAccessException extends Exception {
 
-  public DataAccessException(String message) {
-    super(message);
-  }
+	private static final long serialVersionUID = 3314752761248320400L;
 
-  public DataAccessException(Throwable cause) {
-    super(cause);
-  }
+	public DataAccessException(String message) {
+		super(message);
+	}
 
-  public DataAccessException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	public DataAccessException(Throwable cause) {
+		super(cause);
+	}
+
+	public DataAccessException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

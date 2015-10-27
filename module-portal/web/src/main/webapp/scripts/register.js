@@ -47,6 +47,7 @@ $(document).ready(function(){
 	$("#password2").on("input" ,function() {
 		checkPasswords();
 	});
-
 	
+	$("#dob").datepicker();
+	$("#dob").datepicker("option", "dateFormat", "yy-mm-dd");
 });

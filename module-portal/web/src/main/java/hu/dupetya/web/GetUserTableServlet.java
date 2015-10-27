@@ -1,6 +1,7 @@
 package hu.dupetya.web;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,34 +13,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import hu.dupetya.common.account.dao.DAOManagerException;
+import hu.dupetya.common.account.dao.DataAccessException;
 import hu.dupetya.common.account.model.Account;
+import hu.dupetya.core.account.dao.MySQLDAOManager;
+import hu.dupetya.core.account.dao.impl.AccountMySQLDAOImpl;
+import hu.dupetya.core.util.DBUtil;
+import hu.dupetya.web.users.DataTableRequest;
+import hu.dupetya.web.users.DataTableRequest.Column;
+import hu.dupetya.web.users.DataTableRespond;
+import hu.dupetya.web.users.UserTableEntry;
 
 /**
  * Servlet implementation class GetUserTableServlet
  */
 @WebServlet("/GetUserTableServlet")
 public class GetUserTableServlet extends HttpServlet {
-	public static class UserTableEntry {
-		private String name;
-		private String email;
-
-		public String getName() {
-			return name;
-		}
-
-		public String getEmail() {
-			return email;
-		}
-
-		public void setName(String user) {
-			name = user;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
-	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,22 +53,64 @@ public class GetUserTableServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<Account> accounts = (List<Account>) getServletContext().getAttribute("users");
-		List<UserTableEntry> entries = new ArrayList<>(accounts.size());
 
-		for (Account account : accounts) {
-			UserTableEntry newEntry = new UserTableEntry();
-			newEntry.setEmail(account.getEmail());
-			newEntry.setName(account.getUsername());
-			entries.add(newEntry);
+		MySQLDAOManager daoMgr = null;
+		List<UserTableEntry> entries = new ArrayList<>();
+		DataTableRequest dtRequest = DataTableRequestFromRequest(request);
+		DataTableRespond dtRespond = new DataTableRespond();
+		try {
+			daoMgr = new MySQLDAOManager();
+			daoMgr.open();
+			AccountMySQLDAOImpl dao = (AccountMySQLDAOImpl) daoMgr.getDao();
+
+			List<Account> filteredAccounts = dao.findCustom(dtRequest.getStart(), dtRequest.getLength(),
+					dtRequest.getSearch(), dtRequest.getOrderCol().getSqlColumnName(), dtRequest.getOrderDir());
+
+			for (Account account : filteredAccounts) {
+				UserTableEntry entry = new UserTableEntry();
+
+				entry.setDob(new SimpleDateFormat("yyyy-MM-dd").format(account.getDateOfBirth()));
+				entry.setEmail(account.getEmail());
+				entry.setName(account.getUsername());
+
+				entries.add(entry);
+			}
+
+			int total = DBUtil.numberOfRecords("users");
+			dtRespond.setDraw(dtRequest.getDraw());
+			dtRespond.setRecordsFiltered("".equals(dtRequest.getSearch()) ? total : filteredAccounts.size());
+			dtRespond.setRecordsTotal(total);
+			dtRespond.setData(entries);
+
+			daoMgr.close();
+		} catch (DAOManagerException | DataAccessException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				daoMgr.close();
+			} catch (Exception e) {
+			}
+
+			Gson gson = new Gson();
+			gson.toJson(dtRespond, response.getWriter());
 		}
 
-		Gson gson = new Gson();
-		gson.toJson(entries, response.getWriter());
+	}
+
+	private DataTableRequest DataTableRequestFromRequest(HttpServletRequest request) {
+		DataTableRequest res = new DataTableRequest();
+
+		res.setDraw(Integer.valueOf(request.getParameter("draw")));
+		res.setLength(Integer.valueOf(request.getParameter("length")));
+		res.setOrderCol(Column.from(request.getParameter("order[0][column]")));
+		res.setOrderDir(request.getParameter("order[0][dir]"));
+		res.setSearch(request.getParameter("search[value]"));
+		res.setStart(Integer.valueOf(request.getParameter("start")));
+
+		return res;
 	}
 
 }

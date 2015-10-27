@@ -2,17 +2,25 @@
 //
 
 $(document).ready(function() {
-	
+
 	$("table").DataTable({
-		"jQueryUI": true,
+		"jQueryUI" : true,
+		"serverSide" : true,
 		"ajax" : {
 			"url" : "GetUserTableServlet",
 			"type" : "POST",
-			"dataSrc":"",
+			"dataSrc" : "data",
+			"dataType" : "json"
 		},
-		"columns" : [{"data" : "name"}, {"data" : "email"}]
+		"columns" : [ {
+			"data" : "name"
+		}, {
+			"data" : "email"
+		}, {
+			"data" : "dob"
+		} ]
 	});
-	
+
 	$(".menu").menu();
-	
+
 });

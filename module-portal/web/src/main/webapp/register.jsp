@@ -15,39 +15,42 @@
 			<%@ include file="topnav.jsp"%>
 		</div>
 		<div id="content">
-			<div id="result">
-				<c:if test="${sessionScope.result != null }">
+			<c:if test="${sessionScope.result != null }">
+				<div id="result">
+
 					<c:set var="colr" value="red" />
 					<c:choose>
-					<c:when test="${sessionScope.result.getResult() == 'SUCCESS' }">
-						<c:set var="colr" value="green" />
-						<font color = "${colr }">${sessionScope.result.getMessage() }</font>
-						<script>
-							setTimeout(function(){ window.location.replace("users.jsp"); }, 3000);
-						</script>
-					</c:when>
-					
-					<c:otherwise>
-						<font color = "${colr }">${sessionScope.result.getMessage() }</font>
-						<ul class="violationList">
-							<c:forEach var="violation" items="${sessionScope.violations }">
-								<li class="violationListElement">
-								<font color = "${colr }">${violation.getError() }</font>
-								</li>
-							</c:forEach>
-						</ul>
-						<c:remove var="violations"/>
-					</c:otherwise>
+						<c:when test="${sessionScope.result.getResult() == 'SUCCESS' }">
+							<c:set var="colr" value="green" />
+							<font color="${colr }">${sessionScope.result.getMessage() }</font>
+						</c:when>
+
+						<c:otherwise>
+							<font color="${colr }">${sessionScope.result.getMessage() }</font>
+							<c:if test="${not sessionScope.result.getCauses().isEmpty() }">
+								<ul class="violationList">
+									<c:forEach var="violation" items="${sessionScope.result.getCauses() }">
+										<li class="violationListElement">
+										<font color="${colr }">
+										<c:out value="${ violation }"></c:out>
+										</font>
+										</li>
+									</c:forEach>
+								</ul>
+							</c:if>
+							<c:remove var="violations" />
+						</c:otherwise>
 					</c:choose>
-					
-					
-					<c:remove var="result"/>
-				</c:if>
-			</div>
+
+
+					<c:remove var="result" />
+
+				</div>
+			</c:if>
 
 			<tg:registerForm />
 
-			<c:remove var="registerInfo"/>
+			<c:remove var="registerInfo" />
 		</div>
 		<div id="footer">
 			<%@include file="footer.jsp"%>

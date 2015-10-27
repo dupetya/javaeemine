@@ -1,5 +1,7 @@
 package hu.dupetya.common.account.model;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +11,15 @@ public class Account {
 	private String username;
 	private String encryptedPassword;
 	private String email;
+	private Date dateOfBirth;
+
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 
 	public long getId() {
 		return id;
