@@ -1,8 +1,9 @@
 package hu.dupetya.core.account.dao;
 
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import javax.naming.NamingException;
 
 import hu.dupetya.common.account.dao.DAOException;
 import hu.dupetya.core.account.dao.impl.AccountMySQLDAOImpl;
@@ -31,7 +32,7 @@ public class DAOFactory {
 		try {
 			connection = Datasource.getInstance().getConnection();
 			connection.setAutoCommit(false);
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException | NamingException e) {
 			throw new DAOException(e);
 		}
 	}

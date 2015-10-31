@@ -1,10 +1,11 @@
 package hu.dupetya.core.util;
 
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.naming.NamingException;
 
 import hu.dupetya.common.account.dao.DataAccessException;
 import hu.dupetya.core.connection.Datasource;
@@ -25,7 +26,7 @@ public class DBUtil {
 			if (rs.next()) {
 				result = rs.getInt(1);
 			}
-		} catch (SQLException | PropertyVetoException e) {
+		} catch (SQLException | NamingException e) {
 			throw new DataAccessException(e);
 		} finally {
 			close(connection, rs, query);
