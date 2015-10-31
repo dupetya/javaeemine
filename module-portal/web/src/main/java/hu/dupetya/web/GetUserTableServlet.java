@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import hu.dupetya.common.account.dao.DAOManagerException;
+import hu.dupetya.common.account.dao.DAOException;
 import hu.dupetya.common.account.dao.DataAccessException;
 import hu.dupetya.common.account.model.Account;
-import hu.dupetya.core.account.dao.MySQLDAOManager;
+import hu.dupetya.core.account.dao.DAOFactory;
 import hu.dupetya.core.account.dao.impl.AccountMySQLDAOImpl;
 import hu.dupetya.core.util.DBUtil;
 import hu.dupetya.web.users.DataTableRequest;
@@ -57,15 +57,15 @@ public class GetUserTableServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		MySQLDAOManager daoMgr = null;
+		DAOFactory daoFactory = null;
 		List<UserTableEntry> entries = new ArrayList<>();
 		DataTableRequest dtRequest = DataTableRequestFromRequest(request);
 		DataTableRespond dtRespond = new DataTableRespond();
 		try {
-			daoMgr = new MySQLDAOManager();
-			daoMgr.open();
-			AccountMySQLDAOImpl dao = (AccountMySQLDAOImpl) daoMgr.getDao();
-
+			daoFactory = DAOFactory.getInstance();
+			daoFactory.beginConnection();
+			AccountMySQLDAOImpl dao = daoFactory.getAccountMySQLDAO();
+			daoFactory.beginTransaction();
 			List<Account> filteredAccounts = dao.findCustom(dtRequest.getStart(), dtRequest.getLength(),
 					dtRequest.getSearch(), dtRequest.getOrderCol().getSqlColumnName(), dtRequest.getOrderDir());
 
@@ -85,14 +85,15 @@ public class GetUserTableServlet extends HttpServlet {
 			dtRespond.setRecordsTotal(total);
 			dtRespond.setData(entries);
 
-			daoMgr.close();
-		} catch (DAOManagerException | DataAccessException e) {
-			e.printStackTrace();
-		} finally {
+			daoFactory.endTransaction();
+
+		} catch (DataAccessException | DAOException e) {
 			try {
-				daoMgr.close();
-			} catch (Exception e) {
+				daoFactory.abortTransaction();
+			} catch (DAOException e1) {
 			}
+		} finally {
+			daoFactory.endConnection();
 
 			Gson gson = new Gson();
 			gson.toJson(dtRespond, response.getWriter());

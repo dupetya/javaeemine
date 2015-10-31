@@ -139,8 +139,6 @@ public class AccountMySQLDAOImpl implements AccountDAO {
 		sb.append(" ORDER BY ").append(orderCol).append(" ").append(orderDir);
 		sb.append(" LIMIT ").append(start).append(", ").append(length);
 
-		System.out.println(sb.toString());
-
 		ResultSet rs = null;
 		PreparedStatement query = null;
 		String sql = sb.toString();

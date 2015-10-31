@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import hu.dupetya.common.account.AccountRegistrationException;
+import hu.dupetya.common.account.AccountRegistrationRequest;
+import hu.dupetya.common.account.AccountService;
 import hu.dupetya.common.account.dao.AccountDAO;
-import hu.dupetya.common.account.dao.DAOManagerException;
-import hu.dupetya.core.account.dao.MySQLDAOManager;
-import hu.dupetya.core.util.DBUtil;
-import hu.dupetya.web.account.AccountRegistrationException;
-import hu.dupetya.web.account.AccountRegistrationRequest;
-import hu.dupetya.web.account.AccountService;
+import hu.dupetya.common.account.dao.DAOException;
+import hu.dupetya.core.account.dao.DAOFactory;
 import hu.dupetya.web.register.validation.RegistrationResult;
 import hu.dupetya.web.register.validation.Result;
 import hu.schonherz.training.java.solid.account.impl.AccountRegistrationRequestToAccountConverter;
@@ -80,12 +79,13 @@ public class RegistrationServlet extends HttpServlet {
 
 		session.setAttribute("result", regResult);
 
-		MySQLDAOManager daoMgr = null;
+		DAOFactory daoFactory = null;
+		AccountDAO dao = null;
 
 		try {
-			daoMgr = new MySQLDAOManager();
-			daoMgr.open();
-			AccountDAO dao = daoMgr.getDao();
+			daoFactory = DAOFactory.getInstance();
+			daoFactory.beginConnection();
+			dao = daoFactory.getAccountMySQLDAO();
 
 			validate(aRequest, dao);
 
@@ -94,9 +94,15 @@ public class RegistrationServlet extends HttpServlet {
 			AccountService accountService = new AccountServiceImpl(dao,
 					new AccountRegistrationRequestToAccountConverter(cipherService));
 
+			daoFactory.beginTransaction();
 			accountService.register(aRequest);
+			daoFactory.endTransaction();
 
 		} catch (ViolationException e) {
+			try {
+				daoFactory.abortTransaction();
+			} catch (DAOException e1) {
+			}
 			regResult.setResult(Result.FAIL);
 			regResult.setMessage("Could not register user");
 			List<String> causes = new ArrayList<>();
@@ -106,13 +112,24 @@ public class RegistrationServlet extends HttpServlet {
 				causes.add(violation.getError());
 			}
 
-		} catch (AccountRegistrationException | DAOManagerException e) {
+		} catch (AccountRegistrationException e) {
+			try {
+				daoFactory.abortTransaction();
+			} catch (DAOException e1) {
+			}
 			regResult.setResult(Result.FAIL);
 			regResult.setMessage(e.getMessage());
+		} catch (DAOException e) {
+			try {
+				daoFactory.abortTransaction();
+			} catch (DAOException e1) {
+			}
+			regResult.setResult(Result.FAIL);
+			regResult.setMessage("Problem with data-access");
 		} finally {
-
-			DBUtil.close(daoMgr);
-
+			if (daoFactory != null) {
+				daoFactory.endConnection();
+			}
 			response.sendRedirect("register.jsp");
 		}
 
