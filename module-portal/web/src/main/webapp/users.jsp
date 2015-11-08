@@ -4,13 +4,13 @@
 <html>
 <head>
 <title>Facebook 2 - Users</title>
-<%@ include file="header.jsp" %>
+<%@ include file="public/header.jsp" %>
 </head>
 <body>
 
 	<div id="container">
 		<div id="topnav">
-			<%@ include file="topnav.jsp"%>
+			<%@ include file="public/topnav.jsp"%>
 		</div>
 		
 		<div id="content">
@@ -28,7 +28,7 @@
 		</div>
 		
 		<div id="footer">
-			<%@include file="footer.jsp"%>
+			<%@include file="public/footer.jsp"%>
 		</div>
 	</div>
 

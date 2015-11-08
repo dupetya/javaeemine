@@ -4,19 +4,19 @@
 <html>
 <head>
 <title>Facebook 2</title>
-<%@ include file="header.jsp" %>
+<%@ include file="public/header.jsp" %>
 </head>
 <body>
 
 	<div id="container">
 		<div id = "topnav">
-			<%@ include file="topnav.jsp" %>
+			<%@ include file="public/topnav.jsp" %>
 		</div>
 		<div id = "content">
 			<h1>Welcome!</h1>
 		</div>
 		<div id = "footer">
-			<%@include file="footer.jsp" %>
+			<%@include file="public/footer.jsp" %>
 		</div>
 	</div>
 

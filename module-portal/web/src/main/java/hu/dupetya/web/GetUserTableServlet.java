@@ -13,12 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import hu.dupetya.common.account.dao.DAOException;
-import hu.dupetya.common.account.dao.DataAccessException;
-import hu.dupetya.common.account.model.Account;
-import hu.dupetya.core.account.dao.DAOFactory;
-import hu.dupetya.core.account.dao.impl.AccountMySQLDAOImpl;
-import hu.dupetya.core.util.DBUtil;
 import hu.dupetya.web.users.DataTableRequest;
 import hu.dupetya.web.users.DataTableRequest.Column;
 import hu.dupetya.web.users.DataTableRespond;
@@ -56,48 +50,6 @@ public class GetUserTableServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		DAOFactory daoFactory = null;
-		List<UserTableEntry> entries = new ArrayList<>();
-		DataTableRequest dtRequest = DataTableRequestFromRequest(request);
-		DataTableRespond dtRespond = new DataTableRespond();
-		try {
-			daoFactory = DAOFactory.getInstance();
-			daoFactory.beginConnection();
-			AccountMySQLDAOImpl dao = daoFactory.getAccountMySQLDAO();
-			daoFactory.beginTransaction();
-			List<Account> filteredAccounts = dao.findCustom(dtRequest.getStart(), dtRequest.getLength(),
-					dtRequest.getSearch(), dtRequest.getOrderCol().getSqlColumnName(), dtRequest.getOrderDir());
-
-			for (Account account : filteredAccounts) {
-				UserTableEntry entry = new UserTableEntry();
-
-				entry.setDob(new SimpleDateFormat("yyyy-MM-dd").format(account.getDateOfBirth()));
-				entry.setEmail(account.getEmail());
-				entry.setName(account.getUsername());
-
-				entries.add(entry);
-			}
-
-			int total = DBUtil.numberOfRecords("users");
-			dtRespond.setDraw(dtRequest.getDraw());
-			dtRespond.setRecordsFiltered("".equals(dtRequest.getSearch()) ? total : filteredAccounts.size());
-			dtRespond.setRecordsTotal(total);
-			dtRespond.setData(entries);
-
-			daoFactory.endTransaction();
-
-		} catch (DataAccessException | DAOException e) {
-			try {
-				daoFactory.abortTransaction();
-			} catch (DAOException e1) {
-			}
-		} finally {
-			daoFactory.endConnection();
-
-			Gson gson = new Gson();
-			gson.toJson(dtRespond, response.getWriter());
-		}
 
 	}
 
