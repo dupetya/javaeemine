@@ -14,7 +14,7 @@ import hu.dupetya.common.cipher.CipherService;
 import hu.dupetya.common.cipher.EncryptionException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/spring-core.xml")
+@ContextConfiguration(locations = "/spring-core-test.xml")
 public class DefaultCipherServiceTest {
 
 	private static Logger logger = LoggerFactory.getLogger(DefaultCipherServiceTest.class);

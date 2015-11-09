@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,7 +20,6 @@ public class User implements Serializable {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@Column(name = "username")
@@ -50,6 +47,16 @@ public class User implements Serializable {
 	}
 
 	public User() {
+	}
+
+	public User(long id, String username, String password, String email, Date dateOfBirth, List<Role> roles) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.dateOfBirth = dateOfBirth;
+		this.roles = roles;
 	}
 
 	public long getId() {

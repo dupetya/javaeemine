@@ -14,7 +14,7 @@ import hu.dupetya.common.validator.Validator;
 import hu.dupetya.common.validator.ViolationException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring-core.xml", "/spring-core-test.xml" })
+@ContextConfiguration(locations = { "/spring-core-test.xml" })
 public class EmailValidatorTest {
 
 	private static Logger logger = LoggerFactory.getLogger(EmailValidatorTest.class);
