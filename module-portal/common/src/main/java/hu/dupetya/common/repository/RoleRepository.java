@@ -5,10 +5,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.dupetya.common.entity.Role;
+import hu.dupetya.common.entity.RoleEntity;
 
 @Repository
 @Transactional(propagation = Propagation.SUPPORTS)
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = 4651123575995035275L;
 
@@ -34,22 +35,23 @@ public class User implements Serializable {
 	@Column(name = "dob")
 	private Date dateOfBirth;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id") , inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id") )
-	private List<Role> roles;
+	private List<RoleEntity> roles;
 
-	public List<Role> getRoles() {
+	public List<RoleEntity> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(List<RoleEntity> roles) {
 		this.roles = roles;
 	}
 
-	public User() {
+	public UserEntity() {
 	}
 
-	public User(long id, String username, String password, String email, Date dateOfBirth, List<Role> roles) {
+	public UserEntity(long id, String username, String password, String email, Date dateOfBirth,
+			List<RoleEntity> roles) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -97,6 +99,49 @@ public class User implements Serializable {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof UserEntity)) {
+			return false;
+		}
+		UserEntity other = (UserEntity) obj;
+		if (id != other.id) {
+			return false;
+		}
+		if (username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!username.equals(other.username)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UserEntity [id=").append(id).append(", username=").append(username).append(", password=")
+				.append(password).append(", email=").append(email).append(", dateOfBirth=").append(dateOfBirth)
+				.append(", roles=").append(roles).append("]");
+		return builder.toString();
 	}
 
 }

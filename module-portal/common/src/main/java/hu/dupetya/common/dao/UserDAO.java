@@ -1,14 +1,7 @@
 package hu.dupetya.common.dao;
 
-import java.util.List;
+import hu.dupetya.common.entity.UserEntity;
 
-import hu.dupetya.common.entity.User;
-
-public interface UserDAO {
-	List<User> getAllUsers();
-
-	User getUserByName(String name);
-
-	Long saveUser(User user);
-
+public interface UserDAO extends BaseDAO<UserEntity> {
+	UserEntity findUserByName(String name) throws DAOException;
 }

@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 
 import hu.dupetya.common.converter.ConversionException;
 import hu.dupetya.common.converter.Converter;
-import hu.dupetya.common.entity.User;
+import hu.dupetya.common.entity.UserEntity;
 import hu.dupetya.common.model.RegistrationInput;
 import hu.dupetya.common.service.UserService;
 import hu.dupetya.common.validator.Validator;
@@ -29,10 +30,10 @@ public class RegistrationServlet extends HttpServlet {
 	private UserService userService;
 
 	@Autowired
-	private Validator<RegistrationInput> registerValidator;
+	private Validator<RegistrationInput> registrationInputValidator;
 
 	@Autowired
-	private Converter<RegistrationInput, User> inputToUserConverter;
+	private Converter<RegistrationInput, UserEntity> inputToUserConverter;
 
 	private static final long serialVersionUID = 1L;
 
