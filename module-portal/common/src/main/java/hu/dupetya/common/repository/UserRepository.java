@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.dupetya.common.entity.UserEntity;
 
 @Repository
-@Transactional(propagation = Propagation.SUPPORTS)
+@Transactional(propagation = Propagation.REQUIRED)
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	public UserEntity findByUsername(@Param("username") String name);
 }

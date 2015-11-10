@@ -30,7 +30,6 @@ public class UserDAOTest {
 
 		userDAO.save(user);
 		UserEntity got = userDAO.find(2L);
-		System.out.println(got.getRoles());
 		assertEquals(user, got);
 	}
 

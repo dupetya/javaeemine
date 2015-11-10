@@ -13,7 +13,7 @@ import hu.dupetya.common.entity.UserEntity;
 import hu.dupetya.common.repository.UserRepository;
 
 @Service("userDAO")
-@Transactional(propagation = Propagation.SUPPORTS)
+@Transactional(propagation = Propagation.REQUIRED)
 public class UserDAOImpl implements UserDAO {
 
 	@Autowired

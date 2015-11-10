@@ -5,10 +5,14 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "roles")
+@NamedQueries({
+		@NamedQuery(name = "RoleEntity.findRolesByUserId", query = "select roles from UserEntity u join u.roles roles where u.id=?1") })
 public class RoleEntity implements Serializable {
 
 	private static final long serialVersionUID = 9148623831757914426L;
