@@ -2,12 +2,18 @@ package hu.dupetya.core.validator;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import hu.dupetya.common.dao.DAOException;
+import hu.dupetya.common.dao.UserDAO;
+import hu.dupetya.common.entity.UserEntity;
 import hu.dupetya.common.model.RegistrationInput;
 import hu.dupetya.common.validator.Validator;
 import hu.dupetya.common.validator.ViolationException;
@@ -15,6 +21,9 @@ import hu.dupetya.common.validator.ViolationException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring-core-test.xml" })
 public class RegistrationInputValidatorTest {
+
+	@Autowired
+	UserDAO userDAO;
 
 	@Autowired
 	private Validator<RegistrationInput> registrationInputValidator;
@@ -31,9 +40,10 @@ public class RegistrationInputValidatorTest {
 	}
 
 	@Test(expected = ViolationException.class)
-	public void testUsernameAlreadyTaken() throws ViolationException {
+	public void testUsernameAlreadyTaken() throws ViolationException, DAOException {
 		RegistrationInput regInput = new RegistrationInput("TestAcc1", "testpass", "testpass", "test@testing.com",
 				"1999-01-01");
+		userDAO.save(new UserEntity(1L, "TestAcc1", "", "fff@aaaa.ccc", new Date(), new ArrayList<>()));
 		registrationInputValidator.validate(regInput);
 	}
 

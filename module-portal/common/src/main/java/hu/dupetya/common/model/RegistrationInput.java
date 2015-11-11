@@ -7,6 +7,15 @@ public class RegistrationInput {
 	private String email;
 	private String dateOfBirth;
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("RegistrationInput [username=").append(username).append(", password=").append(password)
+				.append(", passwordAgain=").append(passwordAgain).append(", email=").append(email)
+				.append(", dateOfBirth=").append(dateOfBirth).append("]");
+		return builder.toString();
+	}
+
 	public RegistrationInput() {
 	}
 

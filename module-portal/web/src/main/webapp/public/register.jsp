@@ -5,39 +5,39 @@
 <html>
 <head>
 <title>Facebook 2 - Register</title>
-<%@ include file="header.jsp"%>
-<script src="scripts/register.js"></script>
+<%@ include file="./header.jsp"%>
+<script src="../scripts/register.js"></script>
 </head>
 <body>
 
 	<div id="container">
 		<div id="topnav">
-			<%@ include file="topnav.jsp"%>
+			<%@ include file="./topnav.jsp"%>
 		</div>
 		<div id="content">
-			<c:if test="${not empty request.getAttribute('result') }">
+			<c:if test="${not empty sessionScope.result }">
 				<div id="result">
 
 					<c:set var="colr" value="red" />
 					<c:choose>
-						<c:when test="${request.getAttribute('result') == 'OK' }">
+						<c:when test="${sessionScope.result == 'OK' }">
 							<c:set var="colr" value="green" />
 							<font color="${colr }">Successfully registered user!</font>
 						</c:when>
 
 						<c:otherwise>
-							<font color="${colr }">${request.getAttribute('cause') }</font>
+							<font color="${colr }">${sessionScope.cause }</font>
+							<c:remove var="cause"/>
 						</c:otherwise>
 					</c:choose>
 				</div>
+				<c:remove var="result"/>
 			</c:if>
 
 			<tg:registerForm />
-
-			<c:remove var="registerInfo" />
 		</div>
 		<div id="footer">
-			<%@include file="footer.jsp"%>
+			<%@include file="./footer.jsp"%>
 		</div>
 	</div>
 

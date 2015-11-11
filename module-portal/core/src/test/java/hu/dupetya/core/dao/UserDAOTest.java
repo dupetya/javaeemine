@@ -3,6 +3,7 @@ package hu.dupetya.core.dao;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 import org.junit.Test;
@@ -25,30 +26,30 @@ public class UserDAOTest {
 
 	@Test
 	public void testSave() throws DAOException {
-		UserEntity user = new UserEntity(2L, "Test2", "asd", "asd@asd.asd", new Date(),
+		UserEntity user = new UserEntity(null, "Test2", "asd", "asd@asd.asd", new Date(),
 				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
 
 		userDAO.save(user);
-		UserEntity got = userDAO.find(2L);
+		UserEntity got = userDAO.findUserByName("Test2");
 		assertEquals(user, got);
 	}
 
 	@Test
 	public void testUpdate() throws DAOException {
-		UserEntity user = new UserEntity(3L, "Test3", "asd1", "asd@asd.asd", new Date(),
+		UserEntity user = new UserEntity(null, "Test11", "asd1", "asd@asd.asd", new Date(),
 				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
-		userDAO.save(user);
+		user.setId(userDAO.save(user));
 		user.setPassword("asd2");
 		userDAO.update(user);
 
-		UserEntity got = userDAO.find(3L);
+		UserEntity got = userDAO.find(user.getId());
 		assertEquals("asd2", got.getPassword());
 
 	}
 
 	@Test(expected = DAOException.class)
 	public void testInvalidUpdate() throws DAOException {
-		UserEntity user = new UserEntity(4L, "Test3", "asd1", "asd@asd.asd", new Date(),
+		UserEntity user = new UserEntity(34L, "Test4", "asd1", "asd@asd.asd", new Date(),
 				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
 
 		userDAO.update(user);
@@ -68,10 +69,10 @@ public class UserDAOTest {
 
 	@Test
 	public void testFind() throws DAOException {
-		UserEntity user = new UserEntity(15L, "Test3", "asd1", "asd@asd.asd", new Date(),
+		UserEntity user = new UserEntity(null, "Test3", "asd1", "asd@asd.asd", new Date(),
 				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
-		userDAO.save(user);
-		assertEquals(user, userDAO.find(15L));
+		Long id = userDAO.save(user);
+		assertEquals(id, userDAO.findUserByName("Test3").getId());
 	}
 
 	@Test
@@ -81,8 +82,7 @@ public class UserDAOTest {
 
 	@Test
 	public void testFindAll() throws DAOException {
-		UserEntity user = new UserEntity(31L, "Test7", "asd1", "asd@asd.asd", new Date(),
-				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
+		UserEntity user = new UserEntity(null, "Test7", "asd1", "asd@asd.asd", new Date(), Collections.emptyList());
 		userDAO.save(user);
 
 		assertNotNull(userDAO.findAll());
@@ -90,11 +90,11 @@ public class UserDAOTest {
 
 	@Test
 	public void testFindUserByName() throws DAOException {
-		UserEntity user = new UserEntity(311L, "Test8", "asd1", "asd@asd.asd", new Date(),
+		UserEntity user = new UserEntity(null, "Test8", "asd1", "asd@asd.asd", new Date(),
 				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
-		userDAO.save(user);
+		Long id = userDAO.save(user);
 
-		assertEquals(user, userDAO.findUserByName("Test8"));
+		assertEquals(id, userDAO.findUserByName("Test8").getId());
 	}
 
 }

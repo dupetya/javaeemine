@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 
 CREATE TABLE users (
-  id bigint NOT NULL PRIMARY KEY,
+  id bigint IDENTITY PRIMARY KEY,
   dob datetime NOT NULL,
   email varchar(255) NOT NULL,
   pass varchar(255) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE roles (
-  role_id bigint NOT NULL PRIMARY KEY,
+  role_id bigint IDENTITY PRIMARY KEY,
   role_name varchar(255) NOT NULL,
 );
 

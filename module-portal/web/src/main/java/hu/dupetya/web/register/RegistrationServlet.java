@@ -1,17 +1,17 @@
-package hu.dupetya.register;
+package hu.dupetya.web.register;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-
 import hu.dupetya.common.converter.ConversionException;
 import hu.dupetya.common.converter.Converter;
 import hu.dupetya.common.entity.UserEntity;
@@ -19,12 +19,13 @@ import hu.dupetya.common.model.RegistrationInput;
 import hu.dupetya.common.service.UserService;
 import hu.dupetya.common.validator.Validator;
 import hu.dupetya.common.validator.ViolationException;
+import hu.dupetya.web.AutowiringHttpSerlvet;
 
 /**
  * Servlet implementation class RegistrationServlet
  */
 @WebServlet("/RegistrationServlet")
-public class RegistrationServlet extends HttpServlet {
+public class RegistrationServlet extends AutowiringHttpSerlvet {
 
 	@Autowired
 	private UserService userService;
@@ -33,8 +34,9 @@ public class RegistrationServlet extends HttpServlet {
 	private Validator<RegistrationInput> registrationInputValidator;
 
 	@Autowired
-	private Converter<RegistrationInput, UserEntity> inputToUserConverter;
+	private Converter<RegistrationInput, UserEntity> registrationInputToUserConverter;
 
+	private static Logger logger = LoggerFactory.getLogger(RegistrationServlet.class);
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -43,6 +45,31 @@ public class RegistrationServlet extends HttpServlet {
 	public RegistrationServlet() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		RegistrationInput regInput = getRegistrationInput(request);
+		logger.info(regInput.toString());
+
+		try {
+			registrationInputValidator.validate(regInput);
+
+			UserEntity user = registrationInputToUserConverter.convert(regInput);
+			userService.registerUser(user);
+
+			session.setAttribute("result", "OK");
+		} catch (ViolationException ve) {
+			session.setAttribute("result", "FAIL");
+			session.setAttribute("cause", ve.getMessage());
+		} catch (ConversionException e) {
+			session.setAttribute("result", "FAIL");
+		}
+
+		response.sendRedirect("public/register.jsp");
+
 	}
 
 	/**
@@ -61,25 +88,7 @@ public class RegistrationServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RegistrationInput regInput = getRegistrationInput(request);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
-
-		try {
-			registerValidator.validate(regInput);
-
-			User user = inputToUserConverter.convert(regInput);
-			userService.registerUser(user);
-
-			request.setAttribute("result", "OK");
-		} catch (ViolationException ve) {
-			request.setAttribute("result", "FAIL");
-			request.setAttribute("cause", ve.getMessage());
-		} catch (ConversionException e) {
-			request.setAttribute("result", "FAIL");
-		} finally {
-			dispatcher.forward(request, response);
-		}
-
+		handleRequest(request, response);
 	}
 
 	private RegistrationInput getRegistrationInput(HttpServletRequest request) {

@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -21,7 +23,8 @@ public class UserEntity implements Serializable {
 
 	@Id
 	@Column(name = "id")
-	private long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(name = "username")
 	private String username;
@@ -35,7 +38,7 @@ public class UserEntity implements Serializable {
 	@Column(name = "dob")
 	private Date dateOfBirth;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id") , inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id") )
 	private List<RoleEntity> roles;
 
@@ -50,7 +53,7 @@ public class UserEntity implements Serializable {
 	public UserEntity() {
 	}
 
-	public UserEntity(long id, String username, String password, String email, Date dateOfBirth,
+	public UserEntity(Long id, String username, String password, String email, Date dateOfBirth,
 			List<RoleEntity> roles) {
 		super();
 		this.id = id;
@@ -61,7 +64,7 @@ public class UserEntity implements Serializable {
 		this.roles = roles;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -81,7 +84,7 @@ public class UserEntity implements Serializable {
 		return dateOfBirth;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -105,7 +108,7 @@ public class UserEntity implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -122,7 +125,11 @@ public class UserEntity implements Serializable {
 			return false;
 		}
 		UserEntity other = (UserEntity) obj;
-		if (id != other.id) {
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
 		}
 		if (username == null) {

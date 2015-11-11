@@ -1,9 +1,10 @@
 <%@ tag language="java" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="login-wrapper">
 	<div class="login-content">
 		<h3>Register</h3>
-		<form method="post" action="RegistrationServlet">
+		<form method="post" action=<c:url value='/RegistrationServlet'/>>
 			<label for="username"> Username: <input value="${sessionScope.registerInfo.getUsername() }" type="text"
 				name="username" id="username" required="required" />
 			</label> <label for="password"> Password: <input type="password"

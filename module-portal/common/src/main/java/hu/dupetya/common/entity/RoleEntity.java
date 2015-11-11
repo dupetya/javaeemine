@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -19,7 +21,8 @@ public class RoleEntity implements Serializable {
 
 	@Id
 	@Column(name = "role_id")
-	private long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(name = "role_name")
 	private String name;
@@ -27,7 +30,7 @@ public class RoleEntity implements Serializable {
 	public RoleEntity() {
 	}
 
-	public RoleEntity(long id, String name) {
+	public RoleEntity(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -53,7 +56,7 @@ public class RoleEntity implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -69,7 +72,11 @@ public class RoleEntity implements Serializable {
 			return false;
 		}
 		RoleEntity other = (RoleEntity) obj;
-		if (id != other.id) {
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
 		}
 		return true;
