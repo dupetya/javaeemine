@@ -5,12 +5,16 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import hu.dupetya.common.dao.DAOException;
 import hu.dupetya.common.dao.UserDAO;
@@ -19,6 +23,7 @@ import hu.dupetya.common.entity.UserEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/spring-core-test.xml")
+@Transactional
 public class UserDAOTest {
 
 	@Autowired
@@ -26,24 +31,30 @@ public class UserDAOTest {
 
 	@Test
 	public void testSave() throws DAOException {
-		UserEntity user = new UserEntity(null, "Test2", "asd", "asd@asd.asd", new Date(),
-				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
+		List<RoleEntity> roles = new ArrayList<>();
+		roles.add(new RoleEntity(1L, "ROLE_USER"));
+		UserEntity user = new UserEntity(null, "Test2", "asd", "asd@asd.asd", new Date(), roles);
 
 		userDAO.save(user);
 		UserEntity got = userDAO.findUserByName("Test2");
+		System.out.println(got.getRoles());
 		assertEquals(user, got);
 	}
 
 	@Test
+	//@Ignore
 	public void testUpdate() throws DAOException {
-		UserEntity user = new UserEntity(null, "Test11", "asd1", "asd@asd.asd", new Date(),
-				Arrays.asList(new RoleEntity(1L, "ROLE_USER")));
-		user.setId(userDAO.save(user));
-		user.setPassword("asd2");
-		userDAO.update(user);
+		List<RoleEntity> roles = new ArrayList<>();
+		roles.add(new RoleEntity(1L, "ROLE_USER"));
+		UserEntity user = new UserEntity(null, "Test11", "asd1", "asd@asd.asd", new Date(), roles);
 
-		UserEntity got = userDAO.find(user.getId());
-		assertEquals("asd2", got.getPassword());
+		userDAO.save(user);
+				
+		UserEntity got = userDAO.findUserByName("Test11");
+		got.setPassword("asd2");
+		userDAO.update(got);
+		
+		assertEquals("asd2", userDAO.findUserByName("Test11").getPassword());
 
 	}
 

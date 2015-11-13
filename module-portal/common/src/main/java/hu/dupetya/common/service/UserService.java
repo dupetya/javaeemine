@@ -6,4 +6,6 @@ public interface UserService {
 	public Long registerUser(UserEntity user);
 
 	public void deleteUser(Long id);
+
+	public void setUpRoles(UserEntity user);
 }

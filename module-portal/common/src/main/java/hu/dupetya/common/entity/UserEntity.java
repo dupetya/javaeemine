@@ -38,7 +38,7 @@ public class UserEntity implements Serializable {
 	@Column(name = "dob")
 	private Date dateOfBirth;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id") , inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id") )
 	private List<RoleEntity> roles;
 
