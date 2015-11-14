@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.hello}</ui:define>
+	<ui:define name="content">
+
+		<h:form>
+			<p:panel id="panel" header="New User">
+
+				<p:messages id="msgs" />
+
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="username" value="Username:" />
+					<p:inputText id="username" value="#{registrationBean.username}"
+						required="true" label="Username">
+						<f:validateLength minimum="5" />
+						<p:ajax update="msgusername" event="keyup" />
+					</p:inputText>
+					<p:message id="msgusername" for="username" display="icon" />
+
+					<p:outputLabel for="password" value="Password:" />
+					<p:password id="password" value="#{registrationBean.password}"
+						label="password" required="true">
+						<f:validateLength minimum="5" />
+					</p:password>
+					<p:message for="password" id="msgpassword" display="icon" />
+
+				</h:panelGrid>
+
+				<p:commandButton value="Login" update="panel"
+					actionListener="#{registrationBean.registration}"
+					icon="ui-icon-check" />
+			</p:panel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

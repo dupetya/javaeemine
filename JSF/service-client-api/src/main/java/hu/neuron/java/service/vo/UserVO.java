@@ -8,7 +8,7 @@ public class UserVO implements Serializable {
 	private static final long serialVersionUID = 5932000328505763772L;
 
 	private Long id;
-	private String userName;
+	private String username;
 	private String password;
 	private List<RoleVO> roles;
 
@@ -20,12 +20,12 @@ public class UserVO implements Serializable {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String userName) {
+		this.username = userName;
 	}
 
 	public String getPassword() {
