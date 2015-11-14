@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import org.apache.log4j.Logger;
 
 //Default request scope
-@ManagedBean
+//eager = true -> előre legyártani
+@ManagedBean(eager = true)
+@SessionScoped
 public class HelloWorldBean implements Serializable {
 
 	private static final long serialVersionUID = 4552990854623398173L;
