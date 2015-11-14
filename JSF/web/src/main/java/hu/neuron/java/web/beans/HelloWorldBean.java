@@ -1,11 +1,30 @@
 package hu.neuron.java.web.beans;
 
+import java.io.Serializable;
+
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean
-public class HelloWorldBean {
+import org.apache.log4j.Logger;
 
+//Default request scope
+@ManagedBean
+public class HelloWorldBean implements Serializable {
+
+	private static final long serialVersionUID = 4552990854623398173L;
+
+	private static Logger logger = Logger.getLogger(HelloWorldBean.class);
 	private String message = "Hello World!";
+
+	// Konstruktor helyett!
+	@PostConstruct
+	public void init() {
+		try {
+			logger.debug("HelloWorldBean init()");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
 
 	public String getMessage() {
 		return message;
