@@ -25,10 +25,22 @@
 			<h:form>
 				<p:growl id="messages" showDetail="false" />
 
-				<h3 style="margin-top: 0">Plain Menu</h3>
 				<p:menu>
 					<p:submenu label="Users">
 						<p:menuitem value="Registration" url="/public/registration.xhtml"
+							rendered="#{!(facesContext.externalContext.isUserInRole('USER'))}"
+							update="messages" icon="ui-icon-disk" />
+						<p:menuitem value="Login" url="/public/login.xhtml"
+							rendered="#{!(facesContext.externalContext.isUserInRole('USER'))}"
+							update="messages" icon="ui-icon-disk" />
+						<p:menuitem value="Logout" url="/logout"
+							rendered="#{facesContext.externalContext.isUserInRole('USER')}"
+							update="messages" icon="ui-icon-disk" />
+					</p:submenu>
+					<p:submenu
+						rendered="#{facesContext.externalContext.isUserInRole('USER')}"
+						label="Messages">
+						<p:menuitem value="Inbox" url="/secured/messages.xhtml"
 							update="messages" icon="ui-icon-disk" />
 					</p:submenu>
 				</p:menu>

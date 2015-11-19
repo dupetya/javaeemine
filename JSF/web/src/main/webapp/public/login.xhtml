@@ -9,33 +9,23 @@
 	<ui:define name="content">
 
 		<h:form>
-			<p:panel id="panel" header="New User">
+			<p:panel id="loginPanel" header="Login">
 
 				<p:messages id="msgs" />
 
-				<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid columns="2" cellpadding="5">
 					<p:outputLabel for="username" value="Username:" />
-					<p:inputText id="username" value="#{registrationBean.username}"
-						required="true" label="Username">
-						<f:validateLength minimum="5" />
-						<p:ajax update="msgusername" event="keyup" />
-					</p:inputText>
-					<p:message id="msgusername" for="username" display="icon" />
+					<p:inputText id="username" required="true" label="username"
+						value="#{loginBean.username}" />
 
 					<p:outputLabel for="password" value="Password:" />
-					<p:password id="password" value="#{registrationBean.password}"
-						label="password" required="true">
-						<f:validateLength minimum="5" />
-					</p:password>
-					<p:message for="password" id="msgpassword" display="icon" />
-
+					<p:password id="password" label="password" required="true"
+						value="#{loginBean.password}" />
 				</h:panelGrid>
 
-				<p:commandButton value="Login" update="panel"
-					actionListener="#{registrationBean.registration}"
-					icon="ui-icon-check" />
+				<p:commandButton value="Login" actionListener="#{loginBean.login}"
+					update="loginPanel" icon="ui-icon-check" />
 			</p:panel>
 		</h:form>
-
 	</ui:define>
 </ui:composition>

@@ -1,4 +1,4 @@
-package hu.shonherz.java.dao;
+package hu.schonherz.java.dao;
 
 import static org.junit.Assert.*;
 

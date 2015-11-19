@@ -8,6 +8,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import hu.neuron.java.service.UserService;
 import hu.neuron.java.service.vo.UserVO;
 
@@ -28,7 +30,7 @@ public class RegistrationBean implements Serializable {
 		FacesContext currInstance = FacesContext.getCurrentInstance();
 		UserVO userVo = new UserVO();
 		userVo.setUsername(username);
-		userVo.setPassword(password);
+		userVo.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
 
 		if (username == null || password == null || passwordConfirmation == null
 				|| !password.equals(passwordConfirmation)) {
