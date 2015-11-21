@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.neuron.java.service.UserConverter;
 import hu.neuron.java.service.UserService;
 import hu.neuron.java.service.vo.UserVO;
-import hu.schonherz.java.dao.RoleDAO;
-import hu.schonherz.java.dao.UserDAO;
+import hu.schonherz.java.dao.RoleDao;
+import hu.schonherz.java.dao.UserDao;
 import hu.schonherz.java.entities.Role;
 import hu.schonherz.java.entities.User;
 
@@ -21,10 +21,10 @@ import hu.schonherz.java.entities.User;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserDAO userDao;
+	UserDao userDao;
 
 	@Autowired
-	RoleDAO roleDao;
+	RoleDao roleDao;
 
 	@Override
 	public UserVO findUserByName(String name) throws Exception {
@@ -34,22 +34,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void registrationUser(UserVO userVO) throws Exception {
-		User user = UserConverter.toEntity(userVO);
-		user = userDao.save(user);
 
+		User user = userDao.save(UserConverter.toEntity(userVO));
 		List<Role> roles = user.getRoles();
 		if (roles == null || roles.isEmpty()) {
 			roles = new ArrayList<>();
 		}
 
 		Role role = getUserRole();
+
 		roles.add(role);
 
 		user.setRoles(roles);
+
 		userDao.save(user);
+
 	}
 
-	public Role getUserRole() {
+	private Role getUserRole() {
 		Role role = roleDao.findByName("USER_ROLE");
 		if (role == null) {
 			role = new Role();
@@ -62,17 +64,31 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserVO> getUserList(int i, int pageSize, String sortField, int dir, String filter,
 			String filterColumnName) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Integer getUserCount() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void saveUser(UserVO selectedUser) {
+		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public UserVO findById(Long id) {
+		return UserConverter.toVo(userDao.findOne(id));
+	}
+
+	@Override
+	public List<UserVO> getUsers() {
+		
+		return UserConverter.toVo(userDao.findAll());
 	}
 
 }

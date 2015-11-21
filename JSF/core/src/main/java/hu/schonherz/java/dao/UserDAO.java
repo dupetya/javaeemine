@@ -6,10 +6,9 @@ import org.springframework.stereotype.Repository;
 import hu.schonherz.java.entities.User;
 
 @Repository
-public interface UserDAO extends JpaRepository<User, Long> {
+public interface UserDao extends JpaRepository<User, Long> {
 
-	User findByUsername(String name);
+	User findByUsername(String username);
 
-	Long countByUsername(String name);
-
+	Long countByUsername(String username);
 }

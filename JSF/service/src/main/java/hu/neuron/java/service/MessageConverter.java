@@ -11,7 +11,7 @@ import hu.schonherz.java.entities.Message;
 
 public class MessageConverter {
 
-	private static Mapper mapper = new DozerBeanMapper();
+	static Mapper mapper = new DozerBeanMapper();
 
 	public static MessageVO toVo(Message Message) {
 		if (Message == null) {
@@ -20,31 +20,26 @@ public class MessageConverter {
 		return mapper.map(Message, MessageVO.class);
 	}
 
-	public static Message toEntity(MessageVO Message) {
-		if (Message == null) {
+	public static Message toEntity(MessageVO MessageVO) {
+		if (MessageVO == null) {
 			return null;
 		}
-		return mapper.map(Message, Message.class);
+		return mapper.map(MessageVO, Message.class);
 	}
 
-	public static List<MessageVO> toVo(List<Message> Messages) {
-		List<MessageVO> res = new ArrayList<>();
-
-		for (Message Message : Messages) {
-			res.add(toVo(Message));
+	public static List<MessageVO> toVo(List<Message> Message) {
+		List<MessageVO> rv = new ArrayList<>();
+		for (Message Messages : Message) {
+			rv.add(toVo(Messages));
 		}
-
-		return res;
+		return rv;
 	}
 
-	public static List<Message> toEntity(List<MessageVO> Messages) {
-		List<Message> res = new ArrayList<>();
-
-		for (MessageVO Message : Messages) {
-			res.add(toEntity(Message));
+	public static List<Message> toEntity(List<MessageVO> Message) {
+		List<Message> rv = new ArrayList<>();
+		for (MessageVO Messages : Message) {
+			rv.add(toEntity(Messages));
 		}
-
-		return res;
+		return rv;
 	}
-
 }

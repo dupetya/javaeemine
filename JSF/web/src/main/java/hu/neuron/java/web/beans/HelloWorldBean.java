@@ -8,26 +8,26 @@ import javax.faces.bean.SessionScoped;
 
 import org.apache.log4j.Logger;
 
-//Default request scope
-//eager = true -> előre legyártani
-@ManagedBean(eager = true)
+@ManagedBean
 @SessionScoped
 public class HelloWorldBean implements Serializable {
 
+	
 	private static final long serialVersionUID = 4552990854623398173L;
 
-	private static Logger logger = Logger.getLogger(HelloWorldBean.class);
+	Logger logger = Logger.getLogger(HelloWorldBean.class);
+
 	private String message = "Hello World!";
 
-	// Konstruktor helyett!
 	@PostConstruct
 	public void init() {
 		try {
-			logger.debug("HelloWorldBean init()");
+			logger.debug("HelloWorldBean init!");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-	}
+
+	} 
 
 	public String getMessage() {
 		return message;

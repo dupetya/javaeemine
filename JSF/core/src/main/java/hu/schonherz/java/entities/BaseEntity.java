@@ -7,7 +7,6 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class BaseEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -19,4 +18,5 @@ public class BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 }

@@ -7,6 +7,7 @@ public class RoleVO implements Serializable {
 	private static final long serialVersionUID = -8403753397412273249L;
 
 	private Long id;
+
 	private String name;
 
 	public Long getId() {
@@ -27,7 +28,7 @@ public class RoleVO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RoleVO [id=" + id + ", Name=" + name + "]";
+		return "RoleVO [id=" + id + ", name=" +name + "]";
 	}
 
 }

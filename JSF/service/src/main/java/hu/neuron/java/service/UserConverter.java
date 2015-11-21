@@ -11,7 +11,7 @@ import hu.schonherz.java.entities.User;
 
 public class UserConverter {
 
-	private static Mapper mapper = new DozerBeanMapper();
+	static Mapper mapper = new DozerBeanMapper();
 
 	public static UserVO toVo(User user) {
 		if (user == null) {
@@ -20,31 +20,26 @@ public class UserConverter {
 		return mapper.map(user, UserVO.class);
 	}
 
-	public static User toEntity(UserVO user) {
-		if (user == null) {
+	public static User toEntity(UserVO userVO) {
+		if (userVO == null) {
 			return null;
 		}
-		return mapper.map(user, User.class);
+		return mapper.map(userVO, User.class);
 	}
 
-	public static List<UserVO> toVo(List<User> users) {
-		List<UserVO> res = new ArrayList<>();
-
-		for (User user : users) {
-			res.add(toVo(user));
+	public static List<UserVO> toVo(List<User> user) {
+		List<UserVO> rv = new ArrayList<>();
+		for (User users : user) {
+			rv.add(toVo(users));
 		}
-
-		return res;
+		return rv;
 	}
 
-	public static List<User> toEntity(List<UserVO> users) {
-		List<User> res = new ArrayList<>();
-
-		for (UserVO user : users) {
-			res.add(toEntity(user));
+	public static List<User> toEntity(List<UserVO> user) {
+		List<User> rv = new ArrayList<>();
+		for (UserVO users : user) {
+			rv.add(toEntity(users));
 		}
-
-		return res;
+		return rv;
 	}
-
 }

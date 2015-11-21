@@ -11,7 +11,7 @@ import hu.schonherz.java.entities.Role;
 
 public class RoleConverter {
 
-	private static Mapper mapper = new DozerBeanMapper();
+	static Mapper mapper = new DozerBeanMapper();
 
 	public static RoleVO toVo(Role Role) {
 		if (Role == null) {
@@ -20,31 +20,26 @@ public class RoleConverter {
 		return mapper.map(Role, RoleVO.class);
 	}
 
-	public static Role toEntity(RoleVO Role) {
-		if (Role == null) {
+	public static Role toEntity(RoleVO RoleVO) {
+		if (RoleVO == null) {
 			return null;
 		}
-		return mapper.map(Role, Role.class);
+		return mapper.map(RoleVO, Role.class);
 	}
 
-	public static List<RoleVO> toVo(List<Role> Roles) {
-		List<RoleVO> res = new ArrayList<>();
-
-		for (Role Role : Roles) {
-			res.add(toVo(Role));
+	public static List<RoleVO> toVo(List<Role> Role) {
+		List<RoleVO> rv = new ArrayList<>();
+		for (Role Roles : Role) {
+			rv.add(toVo(Roles));
 		}
-
-		return res;
+		return rv;
 	}
 
-	public static List<Role> toEntity(List<RoleVO> Roles) {
-		List<Role> res = new ArrayList<>();
-
-		for (RoleVO Role : Roles) {
-			res.add(toEntity(Role));
+	public static List<Role> toEntity(List<RoleVO> Role) {
+		List<Role> rv = new ArrayList<>();
+		for (RoleVO Roles : Role) {
+			rv.add(toEntity(Roles));
 		}
-
-		return res;
+		return rv;
 	}
-
 }

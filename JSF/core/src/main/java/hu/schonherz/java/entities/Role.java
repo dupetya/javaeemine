@@ -1,14 +1,9 @@
 package hu.schonherz.java.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
-import hu.schonherz.java.entities.BaseEntity;
+import javax.persistence.Entity;
 
-/**
- * Entity implementation class for Entity: Role
- *
- */
 @Entity
 public class Role extends BaseEntity implements Serializable {
 
@@ -23,5 +18,4 @@ public class Role extends BaseEntity implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }
